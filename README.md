@@ -19,12 +19,19 @@ Udemy参考教材: [【Android開発/2023年版】３つのアプリを作りな
 
 ## 実装Memo
 
+データベース周りのセット:
+
 - Roomの依存関係を[`build.gradle(app)`](app/build.gradle)に追加
 - Taskエンティティを作る
 - TaskDaoを作る（インターフェース）
 - DAOメソッドの非同期化
 - データベースクラスの作成(`AppDataBase`)
 
+依存関係注入:
+
+- Hiltライブラリの[依存関係を追加する](https://developer.android.com/training/dependency-injection/hilt-android?hl=ja#groovy)
+- Hiltモジュールの作成（[`Module`](app/src/main/java/com/example/jettodoapp/Module.kt)）
+- Hiltアプリケーション、エントリーポイントの設置
 
 ### エラー等詰まったところ
 
@@ -64,6 +71,27 @@ TaskDaoの実装方針:
 - `@Database`アノテーション
 - `RoomDatabase`クラスを拡張する抽象クラスであること
 - 引数ゼロでDAOクラスのインスタンスを返す抽象メソッドを定義すること
+
+### 依存関係注入
+
+このTodoアプリでどのようにDIするか:
+
+- `MainActivity` <- `MainViewModel`
+- `MainViewModel` <- `TaskDao`
+
+Hiltとは:
+
+- 依存関係インジェクションをするための推奨ライブラリ
+
+Hiltモジュールを作る理由:
+
+- 後に`TaskDao`のインスタンスを`MainViewModel`にインジェクトしたい
+  - しかし、TaskDaoはインターフェースでコンストラクタがない
+    - そのため、Hiltにインスタンスの生成方法を教える必要がある
+
+参照: [Hiltモジュール](https://developer.android.com/training/dependency-injection/hilt-android?hl=ja#hilt-modules)
+
+
 
 ### まとめ
 
